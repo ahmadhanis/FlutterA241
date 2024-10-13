@@ -16,7 +16,50 @@ class MainApp extends StatelessWidget {
           /// [CalculatorApp] widget.
           useMaterial3: true,
         ),
-        home: const CalculatorApp());
+        home: const SPlashScreen());
+  }
+}
+
+class SPlashScreen extends StatefulWidget {
+  const SPlashScreen({super.key});
+
+  @override
+  State<SPlashScreen> createState() => _SPlashScreenState();
+}
+
+class _SPlashScreenState extends State<SPlashScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(const Duration(seconds: 5), () {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const CalculatorApp()));
+    });
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/calculator.png',
+              height: 200,
+              width: 200,
+            ),
+            const SizedBox(height: 10,),
+            const Text(
+              "MyCalculator",
+              style: TextStyle(fontSize: 30),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -64,7 +107,9 @@ class _CalculatorAppState extends State<CalculatorApp> {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         filled: true,
-                        fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                        fillColor: Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerHighest,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -77,7 +122,9 @@ class _CalculatorAppState extends State<CalculatorApp> {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         filled: true,
-                        fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                        fillColor: Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerHighest,
                       ),
                     ),
                     const SizedBox(height: 16),
