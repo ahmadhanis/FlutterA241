@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           pass = "";
                           storeSharedPrefs(value, email, pass);
                         }
-                        rememberme = value ?? false;
+                        rememberme = value;
                         setState(() {});
                       });
                     },
@@ -132,8 +132,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     http.post(Uri.parse("${MyConfig.servername}/memberlink/api/login_user.php"),
         body: {"email": email, "password": password}).then((response) {
-      // print(response.statusCode);
-      // print(response.body);
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         if (data['status'] == "success") {
@@ -182,9 +180,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> loadPref() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    emailcontroller.text = prefs.getString("email")!;
-    passwordcontroller.text = prefs.getString("password")!;
-    rememberme = prefs.getBool("rememberme")!;
+    emailcontroller.text = prefs.getString("email") ?? "";
+    passwordcontroller.text = prefs.getString("password") ?? "";
+    rememberme = prefs.getBool("rememberme") ?? false;
     setState(() {});
   }
 }
