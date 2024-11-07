@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:my_member_link/models/news.dart';
 import 'package:my_member_link/myconfig.dart';
+import 'package:my_member_link/views/edit_news.dart';
 import 'package:my_member_link/views/new_news.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,7 +28,9 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: const Text("Newsletter"),
+        ),
         body: newsList.isEmpty
             ? const Center(
                 child: Text("Loading..."),
@@ -37,9 +40,23 @@ class _MainScreenState extends State<MainScreen> {
                 itemBuilder: (context, index) {
                   return Card(
                     child: ListTile(
-                      title: Text(newsList[index].newsTitle.toString()),
-                      subtitle: Text(newsList[index].newsDetails.toString()),
-
+                      onLongPress: () {
+                        deleteDialog(index);
+                      },
+                      title: Text(truncateString(
+                          newsList[index].newsTitle.toString(), 30)),
+                      subtitle: Text(
+                        truncateString(
+                            newsList[index].newsDetails.toString(), 100),
+                        textAlign: TextAlign.justify,
+                      ),
+                      // leading: const Icon(Icons.article),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.arrow_forward),
+                        onPressed: () {
+                          showNewsDetailsDialog(index);
+                        },
+                      ),
                     ),
                   );
                 }),
@@ -48,8 +65,8 @@ class _MainScreenState extends State<MainScreen> {
             children: [
               const DrawerHeader(
                 decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
+                    // color: Colors.blue,
+                    ),
                 child: Text('Drawer Header'),
               ),
               ListTile(
@@ -82,10 +99,19 @@ class _MainScreenState extends State<MainScreen> {
             // loadNewsData();
             await Navigator.push(context,
                 MaterialPageRoute(builder: (content) => const NewNewsScreen()));
-                loadNewsData();
+            loadNewsData();
           },
           child: const Icon(Icons.add),
         ));
+  }
+
+  String truncateString(String str, int length) {
+    if (str.length > length) {
+      str = str.substring(0, length);
+      return "$str...";
+    } else {
+      return str;
+    }
   }
 
   void loadNewsData() {
@@ -101,12 +127,92 @@ class _MainScreenState extends State<MainScreen> {
           for (var item in result) {
             News news = News.fromJson(item);
             newsList.add(news);
-            print(news.newsTitle);
           }
           setState(() {});
         }
       } else {
         print("Error");
+      }
+    });
+  }
+
+  void showNewsDetailsDialog(int index) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(newsList[index].newsTitle.toString()),
+            content: Text(newsList[index].newsDetails.toString(),
+                textAlign: TextAlign.justify),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  News news = newsList[index];
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (content) => EditNewsScreen(news: news)));
+                },
+                child: const Text("Edit?"),
+              ),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Close"))
+            ],
+          );
+        });
+  }
+
+  void deleteDialog(int index) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              "Delete \"${truncateString(newsList[index].newsTitle.toString(), 20)}\"",
+              style: const TextStyle(fontSize: 18),
+            ),
+            content: const Text("Are you sure you want to delete this news?"),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    deleteNews(index);
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Yes")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("No"))
+            ],
+          );
+        });
+  }
+
+  void deleteNews(int index) {
+    http.post(
+        Uri.parse("${MyConfig.servername}/memberlink/api/delete_news.php"),
+        body: {"newsid": newsList[index].newsId.toString()}).then((response) {
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        log(data.toString());
+        if (data['status'] == "success") {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Success"),
+            backgroundColor: Colors.green,
+          ));
+          loadNewsData(); //reload data
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Failed"),
+            backgroundColor: Colors.red,
+          ));
+        }
       }
     });
   }

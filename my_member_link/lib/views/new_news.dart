@@ -14,8 +14,14 @@ class NewNewsScreen extends StatefulWidget {
 class _NewNewsScreenState extends State<NewNewsScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController detailsController = TextEditingController();
+
+  late double screenWidth, screenHeight;
+
   @override
   Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("New Newsletter"),
@@ -35,14 +41,17 @@ class _NewNewsScreenState extends State<NewNewsScreen> {
               const SizedBox(
                 height: 10,
               ),
-              TextField(
-                controller: detailsController,
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    hintText: "News Details"),
-                maxLines: 18,
+              SizedBox(
+                height: screenHeight * 0.7,
+                child: TextField(
+                  controller: detailsController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      hintText: "News Details"),
+                  maxLines: screenHeight ~/ 35,
+                ),
               ),
               const SizedBox(
                 height: 20,
@@ -50,9 +59,9 @@ class _NewNewsScreenState extends State<NewNewsScreen> {
               MaterialButton(
                   elevation: 10,
                   onPressed: onInsertNewsDialog,
-                  minWidth: 400,
+                  minWidth: screenWidth,
                   height: 50,
-                  color: Colors.purple[800],
+                  color: Colors.blueAccent,
                   child: const Text("Insert",
                       style: TextStyle(color: Colors.white))),
             ],
