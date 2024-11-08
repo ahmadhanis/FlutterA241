@@ -66,7 +66,7 @@ class _EditNewsState extends State<EditNewsScreen> {
                   onPressed: onUpdateNewsDialog,
                   minWidth: screenWidth,
                   height: 50,
-                  color: Colors.blueAccent,
+                  // color: Colors.blueAccent,
                   child: const Text("Update News",
                       style: TextStyle(color: Colors.white))),
             ],

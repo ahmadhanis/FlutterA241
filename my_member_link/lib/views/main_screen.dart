@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:my_member_link/models/news.dart';
 import 'package:my_member_link/myconfig.dart';
 import 'package:my_member_link/views/edit_news.dart';
+import 'package:my_member_link/views/mydrawer.dart';
 import 'package:my_member_link/views/new_news.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,6 +19,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   List<News> newsList = [];
+  final df = DateFormat('dd/MM/yyyy hh:mm a');
 
   @override
   void initState() {
@@ -43,16 +46,33 @@ class _MainScreenState extends State<MainScreen> {
                       onLongPress: () {
                         deleteDialog(index);
                       },
-                      title: Text(truncateString(
-                          newsList[index].newsTitle.toString(), 30)),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            truncateString(
+                                newsList[index].newsTitle.toString(), 30),
+                            style: const TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            df.format(DateTime.parse(
+                                newsList[index].newsDate.toString())),
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
                       subtitle: Text(
                         truncateString(
                             newsList[index].newsDetails.toString(), 100),
                         textAlign: TextAlign.justify,
                       ),
+
                       // leading: const Icon(Icons.article),
                       trailing: IconButton(
-                        icon: const Icon(Icons.arrow_forward),
+                        icon: const Icon(
+                          Icons.arrow_forward,
+                        ),
                         onPressed: () {
                           showNewsDetailsDialog(index);
                         },
@@ -60,40 +80,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                   );
                 }),
-        drawer: Drawer(
-          child: ListView(
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                    // color: Colors.blue,
-                    ),
-                child: Text('Drawer Header'),
-              ),
-              ListTile(
-                onTap: () {},
-                title: const Text("Newsletter"),
-              ),
-              const ListTile(
-                title: Text("Events"),
-              ),
-              const ListTile(
-                title: Text("Members"),
-              ),
-              const ListTile(
-                title: Text("Vetting"),
-              ),
-              const ListTile(
-                title: Text("Members"),
-              ),
-              const ListTile(
-                title: Text("Payment"),
-              ),
-              const ListTile(
-                title: Text("Product"),
-              )
-            ],
-          ),
-        ),
+        drawer: const MyDrawer(),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             // loadNewsData();

@@ -57,13 +57,22 @@ class _NewNewsScreenState extends State<NewNewsScreen> {
                 height: 20,
               ),
               MaterialButton(
-                  elevation: 10,
-                  onPressed: onInsertNewsDialog,
-                  minWidth: screenWidth,
-                  height: 50,
-                  color: Colors.blueAccent,
-                  child: const Text("Insert",
-                      style: TextStyle(color: Colors.white))),
+                elevation: 10,
+                onPressed: onInsertNewsDialog,
+                minWidth: screenWidth,
+                height: 50,
+                color: Theme.of(context)
+                    .colorScheme
+                    .secondary, // Uses primary color from theme
+                child: Text(
+                  "Insert",
+                  style: TextStyle(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSecondary, // Text color matches onPrimary color
+                  ),
+                ),
+              ),
             ],
           ),
         ),
