@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:my_member_link/models/news.dart';
 import 'package:my_member_link/myconfig.dart';
-import 'package:my_member_link/views/edit_news.dart';
-import 'package:my_member_link/views/mydrawer.dart';
-import 'package:my_member_link/views/new_news.dart';
+import 'package:my_member_link/views/newsletter/edit_news.dart';
+import 'package:my_member_link/views/shared/mydrawer.dart';
+import 'package:my_member_link/views/newsletter/new_news.dart';
 import 'package:http/http.dart' as http;
 
 class MainScreen extends StatefulWidget {

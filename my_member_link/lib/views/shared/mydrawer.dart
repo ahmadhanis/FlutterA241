@@ -1,4 +1,7 @@
+
 import 'package:flutter/material.dart';
+import 'package:my_member_link/views/events/event_screen.dart';
+import 'package:my_member_link/views/newsletter/main_screen.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -17,26 +20,35 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             onTap: () {
               // Define onTap actions here if needed
+               Navigator.push(context,
+                MaterialPageRoute(builder: (content) => const MainScreen()));
             },
             title: const Text("Newsletter"),
           ),
-          const ListTile(
-            title: Text("Events"),
+          ListTile(
+            title: const Text("Events"),
+            onTap: () {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (content) => const EventScreen()));
+            },
           ),
           const ListTile(
             title: Text("Members"),
           ),
           const ListTile(
-            title: Text("Payment"),
+            title: Text("Payments"),
           ),
           const ListTile(
-            title: Text("Product"),
+            title: Text("Products"),
           ),
           const ListTile(
             title: Text("Vetting"),
           ),
           const ListTile(
             title: Text("Settings"),
+          ),
+          const ListTile(
+            title: Text("Logout"),
           ),
         ],
       ),
