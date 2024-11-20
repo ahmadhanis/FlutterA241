@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:my_member_link/myconfig.dart';
-import 'package:my_member_link/views/newsletter/main_screen.dart';
+import 'package:my_member_link/views/newsletter/news_screen.dart';
 import 'package:my_member_link/views/auth/register_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
