@@ -193,7 +193,6 @@ class _MainScreenState extends State<MainScreen> {
                 onPressed: () async {
                   Navigator.pop(context);
                   News news = newsList[index];
-
                   await Navigator.push(
                       context,
                       MaterialPageRoute(
