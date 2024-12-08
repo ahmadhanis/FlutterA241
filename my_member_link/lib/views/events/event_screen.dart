@@ -79,8 +79,11 @@ class _EventScreenState extends State<EventScreen> {
                         SizedBox(
                           child: Image.network(
                               errorBuilder: (context, error, stackTrace) =>
-                                  Image.asset(
-                                    "assets/images/na.png",
+                                  SizedBox(
+                                    height: screenHeight/6,
+                                    child: Image.asset(
+                                      "assets/images/na.png",
+                                    ),
                                   ),
                               width: screenWidth / 2,
                               height: screenHeight / 6,

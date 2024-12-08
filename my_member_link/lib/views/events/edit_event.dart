@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
 
   var items = [
     'Conference',
-    'Exibition',
+    'Exhibition',
     'Seminar',
     'Hackathon',
   ];
@@ -424,27 +425,41 @@ class _EditEventScreenState extends State<EditEventScreen> {
   }
 
   void updateEvent() {
+    String image;
     String title = titleController.text;
     String location = locationController.text;
     String description = descriptionController.text;
     String start = selectedStartDateTime.toString();
     String end = selectedEndDateTime.toString();
-    String image = base64Encode(_image!.readAsBytesSync());
+    if (_image == null) {
+      image = "NA";
+    } else {
+      image = base64Encode(_image!.readAsBytesSync());
+    }
+
+    if (start == "null") {
+      start = "NA";
+    }
+    if (end == "null") {
+      end = "NA";
+    }
     // log(image);
     http.post(
         Uri.parse("${MyConfig.servername}/memberlink/api/update_event.php"),
         body: {
+          "eventid": widget.myevent.eventId.toString(),
           "title": title,
           "location": location,
           "description": description,
           "eventtype": eventtypevalue,
           "start": start,
           "end": end,
+          "filename":widget.myevent.eventFilename,
           "image": image
         }).then((response) {
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
-        // log(response.body);
+         var data = jsonDecode(response.body);
+        //  log(response.body);
         if (data['status'] == "success") {
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
