@@ -154,11 +154,12 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void loadNewsData() {
+
     http
         .get(Uri.parse(
             "${MyConfig.servername}/memberlink/api/load_news.php?pageno=$curpage"))
         .then((response) {
-      // log(response.body.toString());
+      log(response.body.toString());
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         if (data['status'] == "success") {
